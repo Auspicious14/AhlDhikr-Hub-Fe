@@ -12,9 +12,8 @@ const MyDhikrPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
 
-  const allCategories = [...new Set(savedAnswers.map(a => a.category))];
+  const allCategories = Array.from(new Set(savedAnswers.map(a => a.category)));
 
-  // Logic to handle filter selection
   const toggleFilter = (category: string) => {
     setActiveFilters(prev =>
       prev.includes(category)
@@ -23,7 +22,6 @@ const MyDhikrPage = () => {
     );
   };
 
-  // Filtered answers based on search and active filters
   const filteredAnswers = savedAnswers.filter(answer => {
     const searchMatch = answer.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
                         answer.answerSnippet.toLowerCase().includes(searchQuery.toLowerCase());
