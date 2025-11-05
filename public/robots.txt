@@ -1,0 +1,10 @@
+# Allow all user agents
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /private/
+
+# Sitemap location
+Sitemap: https://ahldhikr-hub.com/sitemap.xml
