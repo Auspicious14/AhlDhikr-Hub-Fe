@@ -11,7 +11,7 @@ interface MyDhikrContextType {
 const MyDhikrContext = createContext<MyDhikrContextType | undefined>(undefined);
 
 export const MyDhikrProvider = ({ children }: { children: ReactNode }) => {
-  const [savedAnswers, setSavedAnswers] useState<SavedAnswer[]>([]);
+  const [savedAnswers, setSavedAnswers] = useState<SavedAnswer[]>([]);
 
   // Load saved answers from localStorage on initial render
   useEffect(() => {
