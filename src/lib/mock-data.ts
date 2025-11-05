@@ -1,5 +1,5 @@
-import { SavedAnswer } from "./my-dhikr/model";
-import { Source } from "./answer/model";
+import { SavedAnswer } from "@/modules/my-dhikr/model";
+import { Source } from "@/modules/answer/model";
 
 interface Answer extends SavedAnswer {
     answer: string;
