@@ -3,11 +3,14 @@ import Head from 'next/head';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Toggle from './components/Toggle';
+import SegmentedControl from './components/SegmentedControl';
 import { Palette, Languages, BookCheck } from 'lucide-react';
 import { useSettings } from './context'; // Use the context
+import { useFont } from './font-context';
 
 const SettingsPage = () => {
   const { theme, setTheme, language, setLanguage } = useSettings();
+  const { font, setFont } = useFont();
   const [activeTab, setActiveTab] = React.useState('Display');
   const isDarkMode = theme === 'dark';
   const isArabicFirst = language === 'ar';
@@ -32,8 +35,20 @@ const SettingsPage = () => {
         return (
             <div>
                 <h2 className="text-2xl font-bold font-heading mb-4">Display Settings</h2>
-                <Toggle label="Dark Mode" enabled={isDarkMode} setEnabled={handleDarkModeToggle} />
-                {/* Font size slider would go here */}
+                <div className="space-y-4">
+                    <Toggle label="Dark Mode" enabled={isDarkMode} setEnabled={handleDarkModeToggle} />
+                    <div>
+                        <label className="block text-lg font-medium mb-2">Font Style</label>
+                        <SegmentedControl
+                            options={[
+                                { label: 'Sans-Serif (Lora)', value: 'lora' },
+                                { label: 'Serif (Playfair Display)', value: 'playfair' },
+                            ]}
+                            value={font}
+                            onChange={setFont}
+                        />
+                    </div>
+                </div>
             </div>
         );
       case 'Language':

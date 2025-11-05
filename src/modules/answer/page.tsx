@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import Breadcrumbs from './components/Breadcrumbs';
 import SourcePanel from './components/SourcePanel';
 import ShareButtons from './components/ShareButtons';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 import { Bookmark, Check, XCircle } from 'lucide-react';
 import { Button } from '@/components/Button';
 import { useMyDhikr } from '../my-dhikr/context';
@@ -79,7 +79,6 @@ const AnswerPage = () => {
         />
       </Head>
 
-      <Toaster position="top-center" richColors />
       <Header />
 
       <main className="container mx-auto px-4 py-8">
