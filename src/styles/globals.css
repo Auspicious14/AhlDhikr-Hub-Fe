@@ -1,11 +1,177 @@
+/* globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-beige text-midnight;
+@layer base {
+  body {
+    @apply bg-beige-100 text-gray-900 antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .dark body {
+    @apply bg-brand-dark text-gray-100;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    @apply font-bold;
+  }
+
+  .font-arabic {
+    font-family: 'Amiri', serif;
+    direction: rtl;
+  }
 }
 
-.dark body {
-  @apply bg-midnight text-beige;
+@layer components {
+  /* Button Styles */
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-button font-semibold transition-all duration-200 focus:outline-none focus:ring-4;
+  }
+
+  .btn-primary {
+    @apply bg-brand-primary text-white hover:bg-emerald-700 focus:ring-emerald-500/30 shadow-soft hover:shadow-medium;
+  }
+
+  .btn-secondary {
+    @apply bg-brand-secondary text-white hover:bg-gold-600 focus:ring-gold-500/30 shadow-soft hover:shadow-medium;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent border-2 border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white focus:ring-brand-primary/30;
+  }
+
+  .btn-light {
+    @apply bg-white text-brand-primary border-2 border-gray-200 hover:border-brand-primary hover:bg-beige-50 focus:ring-brand-primary/20;
+    @apply dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:border-brand-primary dark:hover:bg-gray-700;
+  }
+
+  /* Card Styles */
+  .card {
+    @apply bg-white dark:bg-gray-800 rounded-card shadow-soft hover:shadow-medium transition-all duration-300;
+  }
+
+  .card-interactive {
+    @apply card cursor-pointer hover:-translate-y-1;
+  }
+
+  .card-bordered {
+    @apply card border-2 border-transparent hover:border-brand-primary;
+  }
+
+  /* Input Styles */
+  .input {
+    @apply w-full px-4 py-3 rounded-button border-2 border-gray-200 bg-white text-gray-900 placeholder-gray-400;
+    @apply focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10 outline-none transition-all;
+    @apply dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-500;
+  }
+
+  .input-lg {
+    @apply input px-6 py-4 text-lg;
+  }
+
+  /* Badge Styles */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .badge-primary {
+    @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400;
+  }
+
+  .badge-secondary {
+    @apply bg-gold-100 text-gold-800 dark:bg-gold-900/30 dark:text-gold-400;
+  }
+
+  .badge-neutral {
+    @apply bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300;
+  }
+
+  /* Tag/Chip Styles */
+  .chip {
+    @apply inline-flex items-center px-4 py-2 rounded-full font-medium transition-all cursor-pointer;
+  }
+
+  .chip-default {
+    @apply chip bg-gray-100 text-gray-700 hover:bg-gray-200;
+    @apply dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700;
+  }
+
+  .chip-active {
+    @apply chip bg-brand-primary text-white shadow-soft;
+  }
+
+  /* Link Styles */
+  .link {
+    @apply text-brand-primary hover:text-emerald-700 underline-offset-4 hover:underline transition-colors;
+    @apply dark:text-emerald-400 dark:hover:text-emerald-300;
+  }
+
+  /* Section Styles */
+  .section {
+    @apply py-16 lg:py-24;
+  }
+
+  .section-alt {
+    @apply section bg-white dark:bg-gray-900;
+  }
+
+  /* Container */
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Gradient Text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-brand-primary via-emerald-600 to-teal-600 bg-clip-text text-transparent;
+  }
+
+  /* Gradient Background */
+  .gradient-bg {
+    @apply bg-gradient-to-br from-emerald-50 via-teal-50/50 to-beige-100;
+    @apply dark:from-gray-900 dark:via-gray-800 dark:to-gray-900;
+  }
+
+  /* Icon Container */
+  .icon-container {
+    @apply flex items-center justify-center rounded-xl transition-all;
+  }
+
+  .icon-container-primary {
+    @apply icon-container bg-emerald-100 text-brand-primary;
+    @apply dark:bg-emerald-900/30 dark:text-emerald-400;
+  }
+
+  /* Divider */
+  .divider {
+    @apply border-t border-gray-200 dark:border-gray-700;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Arabic text styling */
+  .arabic-text {
+    font-family: 'Amiri', serif;
+    direction: rtl;
+    line-height: 2;
+    font-size: 1.5rem;
+  }
 }
