@@ -38,6 +38,11 @@ export { Card, cardVariants };
 
 import React from 'react';
 import { ChevronRight, Bookmark, Share2 } from 'lucide-react';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+export interface CardProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<any> {}
 
 const Card = ({ 
   children, 
@@ -46,7 +51,7 @@ const Card = ({
   hover = false,
   onClick,
   ...props 
-}) => {
+}: CardProps) => {
   const baseStyles = 'bg-white dark:bg-gray-800 rounded-card shadow-soft transition-all duration-300';
   
   const variants = {
