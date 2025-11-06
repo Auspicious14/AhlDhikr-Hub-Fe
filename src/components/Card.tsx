@@ -26,14 +26,14 @@ const cardVariants = cva(
 export interface CardProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof cardVariants> {
-  hover?: boolean | string;
+  hover?: boolean;
   onClick?: () => void;
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant, hover, onClick, children, ...props }, ref) => {
     const classes = [
-      cardVariants({ variant, hover: hover === true ? 'true' : 'false' }),
+      cardVariants({ variant, hover: hover ? 'true' : 'false' }),
       onClick && 'cursor-pointer',
       className
     ].filter(Boolean).join(' ');
