@@ -57,10 +57,9 @@ const Header = () => {
             </div>
 
             <nav className="hidden md:flex md:items-center md:space-x-8">
-              <NavLink href="/#how-it-works">How It Works</NavLink>
-              <NavLink href="/#testimonials">Testimonials</NavLink>
               <NavLink href="/ask">Ask a Question</NavLink>
               <NavLink href="/my-dhikr">My Dhikr</NavLink>
+              <NavLink href="/settings">Settings</NavLink>
             </nav>
 
             <div className="flex items-center space-x-4">
@@ -95,21 +94,17 @@ const Header = () => {
             {/* This is a spacer to align with the header button */}
           </div>
           <nav className="flex flex-col space-y-6 pt-8">
-            <MobileNavLink href="/#how-it-works" onClick={toggleMenu}>
-              <Compass />
-              <span>How It Works</span>
-            </MobileNavLink>
-            <MobileNavLink href="/#testimonials" onClick={toggleMenu}>
-              <BookOpen />
-              <span>Testimonials</span>
-            </MobileNavLink>
             <MobileNavLink href="/ask" onClick={toggleMenu}>
               <Heart />
               <span>Ask a Question</span>
             </MobileNavLink>
             <MobileNavLink href="/my-dhikr" onClick={toggleMenu}>
-              <Settings />
+              <BookOpen />
               <span>My Dhikr</span>
+            </MobileNavLink>
+            <MobileNavLink href="/settings" onClick={toggleMenu}>
+              <Settings />
+              <span>Settings</span>
             </MobileNavLink>
             <div className="border-t border-emerald-500/20 my-6"></div>
             <MobileNavLink href="/login" onClick={toggleMenu}>

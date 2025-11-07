@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Button } from '@/components/Button';
-import { Send, Eye } from 'lucide-react';
-import { useRouter } from 'next/router';
+import { Send, Eye, Loader2 } from 'lucide-react';
+import { useAsk } from '../context';
 
 const QuestionSchema = Yup.object().shape({
   question: Yup.string()
@@ -13,7 +13,7 @@ const QuestionSchema = Yup.object().shape({
 
 const QuestionForm = () => {
   const [preview, setPreview] = useState('');
-  const router = useRouter();
+  const { askQuestion, isLoading, error } = useAsk();
 
   return (
     <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-card p-8">
@@ -21,11 +21,9 @@ const QuestionForm = () => {
         initialValues={{ question: '' }}
         validationSchema={QuestionSchema}
         onSubmit={(values, { setSubmitting }) => {
-          // In a real app, this would submit to the backend.
-          // For now, we'll just redirect to a mocked answer page.
-          console.log('Submitted question:', values.question);
-          setSubmitting(false);
-          router.push('/ask/what-is-the-ruling-on-fasting-on-the-day-of-ashura');
+          askQuestion(values.question).finally(() => {
+            setSubmitting(false);
+          });
         }}
         validateOnChange
       >
@@ -49,7 +47,7 @@ const QuestionForm = () => {
               <ErrorMessage name="question" component="div" className="text-red-400 mt-2 text-sm" />
             </div>
 
-            {preview && (
+            {preview && !isLoading && (
               <div className="mb-8 p-6 border border-emerald-500/20 rounded-lg bg-brand-dark/40">
                 <h3 className="flex items-center text-lg font-semibold text-gold-500 mb-3">
                   <Eye className="mr-2 h-5 w-5" />
@@ -59,10 +57,25 @@ const QuestionForm = () => {
               </div>
             )}
 
+            {error && (
+              <div className="mb-4 text-red-400 p-4 bg-red-500/10 rounded-lg">
+                {error}
+              </div>
+            )}
+
             <div className="text-right">
-              <Button type="submit" size="lg" disabled={isSubmitting || !isValid || !dirty}>
-                <Send className="mr-2 h-5 w-5" />
-                Submit Question
+              <Button type="submit" size="lg" disabled={isSubmitting || !isValid || !dirty || isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Searching for Answer...
+                  </>
+                ) : (
+                  <>
+                    <Send className="mr-2 h-5 w-5" />
+                    Submit Question
+                  </>
+                )}
               </Button>
             </div>
           </Form>

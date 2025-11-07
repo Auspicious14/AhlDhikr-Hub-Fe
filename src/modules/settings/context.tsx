@@ -1,8 +1,9 @@
 import React, { createContext, useContext, ReactNode, useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
+import { getCookie, setCookie } from '@/lib/cookies';
 
 type Language = 'en' | 'ar';
-type FontSize = number; // Represent font size as a number (e.g., percentage)
+type FontSize = number;
 
 interface SettingsContextType {
   language: Language;
@@ -12,6 +13,8 @@ interface SettingsContextType {
   isMounted: boolean;
 }
 
+const LANGUAGE_COOKIE = 'language';
+const FONT_SIZE_COOKIE = 'fontSize';
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
@@ -23,10 +26,10 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     setIsMounted(true);
 
-    const savedLang = window.localStorage.getItem('language') as Language | null;
+    const savedLang = getCookie(LANGUAGE_COOKIE) as Language | null;
     if (savedLang) setLanguage(savedLang);
 
-    const savedFontSize = window.localStorage.getItem('fontSize');
+    const savedFontSize = getCookie(FONT_SIZE_COOKIE);
     if (savedFontSize) setFontSize(Number(savedFontSize));
   }, []);
 
@@ -34,7 +37,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     if (isMounted) {
       const root = window.document.documentElement;
       root.dir = language === 'ar' ? 'rtl' : 'ltr';
-      localStorage.setItem('language', language);
+      setCookie(LANGUAGE_COOKIE, language, { expires: 365 });
     }
   }, [language, isMounted]);
 
@@ -42,7 +45,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     if (isMounted) {
       const root = window.document.documentElement;
       root.style.fontSize = `${fontSize}%`;
-      localStorage.setItem('fontSize', String(fontSize));
+      setCookie(FONT_SIZE_COOKIE, String(fontSize), { expires: 365 });
     }
   }, [fontSize, isMounted]);
 

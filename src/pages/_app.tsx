@@ -2,6 +2,7 @@ import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { MyDhikrProvider } from '@/modules/my-dhikr/context'
 import { SettingsProvider } from '@/modules/settings/context'
+import { AskProvider } from '@/modules/ask/context'
 import { ThemeProvider } from 'next-themes'
 import { Lora, Playfair_Display } from 'next/font/google'
 import { FontProvider, useFont } from '@/modules/settings/font-context'
@@ -38,8 +39,10 @@ export default function App({ Component, pageProps }: AppProps) {
         <AppWrapper>
           <SettingsProvider>
             <MyDhikrProvider>
-              <Toaster richColors position="top-center" />
-              <Component {...pageProps} />
+              <AskProvider>
+                <Toaster richColors position="top-center" />
+                <Component {...pageProps} />
+              </AskProvider>
             </MyDhikrProvider>
           </SettingsProvider>
         </AppWrapper>
