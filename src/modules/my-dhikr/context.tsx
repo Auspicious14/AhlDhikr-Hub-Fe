@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { SavedAnswer } from './model';
+import { getJsonCookie, setJsonCookie } from '@/lib/cookies';
 
 interface MyDhikrContextType {
   savedAnswers: SavedAnswer[];
@@ -8,30 +9,23 @@ interface MyDhikrContextType {
   isSaved: (slug: string) => boolean;
 }
 
+const MY_DHIKR_COOKIE = 'myDhikr';
 const MyDhikrContext = createContext<MyDhikrContextType | undefined>(undefined);
 
 export const MyDhikrProvider = ({ children }: { children: ReactNode }) => {
   const [savedAnswers, setSavedAnswers] = useState<SavedAnswer[]>([]);
 
-  // Load saved answers from localStorage on initial render
+  // Load saved answers from cookie on initial render
   useEffect(() => {
-    try {
-      const item = window.localStorage.getItem('myDhikr');
-      if (item) {
-        setSavedAnswers(JSON.parse(item));
-      }
-    } catch (error) {
-      console.error("Failed to load saved answers from localStorage", error);
+    const loadedAnswers = getJsonCookie<SavedAnswer[]>(MY_DHIKR_COOKIE);
+    if (loadedAnswers) {
+      setSavedAnswers(loadedAnswers);
     }
   }, []);
 
-  // Update localStorage whenever savedAnswers changes
+  // Update cookie whenever savedAnswers changes
   useEffect(() => {
-    try {
-      window.localStorage.setItem('myDhikr', JSON.stringify(savedAnswers));
-    } catch (error) {
-      console.error("Failed to save answers to localStorage", error);
-    }
+    setJsonCookie(MY_DHIKR_COOKIE, savedAnswers, { expires: 365 }); // Expires in 1 year
   }, [savedAnswers]);
 
   const saveAnswer = (answer: SavedAnswer) => {
