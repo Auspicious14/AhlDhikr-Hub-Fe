@@ -1,94 +1,127 @@
 import Link from 'next/link';
-import { Sun, Moon, Bell, User, Menu, X } from 'lucide-react';
-import { useSettings } from '@/modules/settings/context';
-import { useState } from 'react';
+import { Sun, Moon, Menu, X, Compass, BookOpen, Heart, Settings, LogIn } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/Button';
+
+const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <Link href={href} className="text-beige-100 hover:text-gold-500 transition-colors duration-300">
+    {children}
+  </Link>
+);
+
+const MobileNavLink = ({ href, children, onClick }: { href: string; children: React.ReactNode; onClick: () => void }) => (
+  <Link href={href} onClick={onClick} className="flex items-center space-x-4 py-3 px-4 text-lg text-beige-100 rounded-lg hover:bg-emerald-500/20 transition-colors duration-300">
+    {children}
+  </Link>
+);
 
 const Header = () => {
-  const { theme, setTheme } = useSettings();
+  const { theme, setTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const renderThemeToggle = () => {
+    if (!mounted) return null;
+    return (
+      <button
+        onClick={toggleTheme}
+        aria-label="Toggle Theme"
+        className="p-2 rounded-full text-gold-500 hover:bg-emerald-500/20 transition-colors duration-300"
+      >
+        {theme === 'dark' ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
+      </button>
+    );
+  };
+
   return (
-    <header className="bg-white/80 dark:bg-midnight/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0">
-            <Link href="/" className="flex items-center space-x-2">
-              <span className="text-2xl font-bold font-heading text-emerald-600 dark:text-emerald-500">AhlDhikr Hub</span>
-            </Link>
-          </div>
-          <nav className="hidden md:flex md:items-center md:space-x-8">
-            <Link href="/ask" className="text-gray-500 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-              Ask a Question
-            </Link>
-            <Link href="/my-dhikr" className="text-gray-500 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-              My Dhikr
-            </Link>
-            <Link href="/about" className="text-gray-500 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-              About
-            </Link>
-            <Link href="/settings" className="text-gray-500 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-              Settings
-            </Link>
-            <Link href="/contact" className="text-gray-500 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-              Contact
-            </Link>
-          </nav>
-          <div className="flex items-center space-x-4">
-            <button onClick={toggleTheme} aria-label="Toggle Theme" className="p-2 rounded-full text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-emerald-600 dark:hover:text-emerald-400">
-              {theme === 'light' ? <Moon className="h-6 w-6" /> : <Sun className="h-6 w-6" />}
-            </button>
-            <button className="hidden md:block p-2 rounded-full text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
-              <Bell className="h-6 w-6" />
-            </button>
-            <button className="hidden md:block p-2 rounded-full text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
-              <User className="h-6 w-6" />
-            </button>
-            <div className="md:hidden">
-              <button onClick={toggleMenu} className="p-2 rounded-full text-gray-500 dark:text-gray-300">
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
+    <>
+      <header className="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-lg border-b border-emerald-500/20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            <div className="flex-shrink-0">
+              <Link href="/" className="flex items-center space-x-3">
+                <img src="/logo.svg" alt="AhlDhikr Hub Logo" className="h-10 w-auto" />
+                <span className="text-2xl font-bold font-heading text-beige-100">AhlDhikr Hub</span>
+              </Link>
+            </div>
+
+            <nav className="hidden md:flex md:items-center md:space-x-8">
+              <NavLink href="/#how-it-works">How It Works</NavLink>
+              <NavLink href="/#testimonials">Testimonials</NavLink>
+              <NavLink href="/ask">Ask a Question</NavLink>
+              <NavLink href="/my-dhikr">My Dhikr</NavLink>
+            </nav>
+
+            <div className="flex items-center space-x-4">
+              {renderThemeToggle()}
+              <div className="hidden md:block">
+                <Link href="/login">
+                  <Button variant="secondary">Login</Button>
+                </Link>
+              </div>
+              <div className="md:hidden">
+                <button
+                  onClick={toggleMenu}
+                  className="p-2 rounded-full text-gold-500 hover:bg-emerald-500/20"
+                  aria-label="Toggle Menu"
+                >
+                  {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        {isMenuOpen && (
-          <nav className="md:hidden pt-2 pb-4 space-y-2">
-            <Link href="/ask" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 hover:bg-gray-50 dark:hover:text-emerald-400 dark:hover:bg-gray-800">
-              Ask a Question
-            </Link>
-            <Link href="/my-dhikr" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 hover:bg-gray-50 dark:hover:text-emerald-400 dark:hover:bg-gray-800">
-              My Dhikr
-            </Link>
-            <Link href="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 hover:bg-gray-50 dark:hover:text-emerald-400 dark:hover:bg-gray-800">
-              About
-            </Link>
-            <Link href="/settings" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 hover:bg-gray-50 dark:hover:text-emerald-400 dark:hover:bg-gray-800">
-              Settings
-            </Link>
-            <Link href="/contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 hover:bg-gray-50 dark:hover:text-emerald-400 dark:hover:bg-gray-800">
-              Contact
-            </Link>
-             <div className="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-2">
-                <button className="w-full flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 hover:bg-gray-50 dark:hover:text-emerald-400 dark:hover:bg-gray-800">
-                  <Bell className="h-6 w-6 mr-3" />
-                  Notifications
-                </button>
-                <button className="w-full flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 hover:bg-gray-50 dark:hover:text-emerald-400 dark:hover:bg-gray-800">
-                  <User className="h-6 w-6 mr-3" />
-                  Profile
-                </button>
-              </div>
+      </header>
+
+      {/* Mobile Menu */}
+      <div
+        className={`fixed inset-0 z-40 bg-brand-dark/95 backdrop-blur-xl transition-transform duration-300 ease-in-out md:hidden ${
+          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full">
+          <div className="flex justify-end h-20 items-center">
+            {/* This is a spacer to align with the header button */}
+          </div>
+          <nav className="flex flex-col space-y-6 pt-8">
+            <MobileNavLink href="/#how-it-works" onClick={toggleMenu}>
+              <Compass />
+              <span>How It Works</span>
+            </MobileNavLink>
+            <MobileNavLink href="/#testimonials" onClick={toggleMenu}>
+              <BookOpen />
+              <span>Testimonials</span>
+            </MobileNavLink>
+            <MobileNavLink href="/ask" onClick={toggleMenu}>
+              <Heart />
+              <span>Ask a Question</span>
+            </MobileNavLink>
+            <MobileNavLink href="/my-dhikr" onClick={toggleMenu}>
+              <Settings />
+              <span>My Dhikr</span>
+            </MobileNavLink>
+            <div className="border-t border-emerald-500/20 my-6"></div>
+            <MobileNavLink href="/login" onClick={toggleMenu}>
+                <LogIn />
+                <span>Login</span>
+            </MobileNavLink>
           </nav>
-        )}
+        </div>
       </div>
-    </header>
+       {/* Spacer to prevent content from being hidden behind the fixed header */}
+       <div className="h-20" />
+    </>
   );
 };
 

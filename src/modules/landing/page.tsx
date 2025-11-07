@@ -3,7 +3,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Hero from './components/Hero';
 import HowItWorks from './components/HowItWorks';
-import TrustPillars from './components/TrustPillars';
 import Testimonials from './components/Testimonials';
 import FinalCTA from './components/FinalCTA';
 import Head from 'next/head';
@@ -41,7 +40,6 @@ const LandingPage = () => {
         <main>
             <Hero />
             <HowItWorks />
-            <TrustPillars />
             <Testimonials />
             <FinalCTA />
         </main>
