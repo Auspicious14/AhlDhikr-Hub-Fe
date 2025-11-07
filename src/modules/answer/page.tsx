@@ -82,7 +82,7 @@ const AnswerPage = ({ answer }: AnswerPageProps) => {
             />
             <hr className="my-8 border-emerald-500/20" />
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <Button onClick={handleSaveToggle} variant={alreadySaved ? "secondary" : "primary"} size="lg">
+              <Button onClick={handleSaveToggle} variant={alreadySaved ? "secondary" : "default"} size="lg">
                 {alreadySaved ? <Check className="mr-2 h-5 w-5" /> : <Bookmark className="mr-2 h-5 w-5" />}
                 {alreadySaved ? "Saved to My Dhikr" : "Save to My Dhikr"}
               </Button>

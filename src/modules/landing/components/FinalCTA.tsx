@@ -17,7 +17,7 @@ const FinalCTA = () => {
         </p>
         <div className="mt-8">
           <Link href="/ask">
-            <Button size="lg" variant="primary">Ask Your First Question</Button>
+            <Button size="lg" variant="default">Ask Your First Question</Button>
           </Link>
         </div>
       </div>

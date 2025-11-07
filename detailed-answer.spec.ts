@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Detailed Answer Page Verification', () => {
   test('should load and display a valid answer page', async ({ page }) => {
     // Navigate to a known valid slug from the mock data
-    await page.goto('/ask/ruling-on-fast-of-arafah');
+    await page.goto('/ask/ruling-on-fasting-day-of-arafah');
 
     // Check for the main question heading to ensure the page loaded correctly
     const heading = page.locator('h1');

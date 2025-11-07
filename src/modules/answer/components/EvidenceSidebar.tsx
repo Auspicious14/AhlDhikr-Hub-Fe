@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BookCheck, ChevronUp } from 'lucide-react';
-import { Source } from '@/lib/mock-data'; // Assuming Source type is exported from mock-data
+import { Source } from '../model';
 import { Disclosure, Transition } from '@headlessui/react';
 
 const EvidenceSidebar = ({ sources }: { sources: Source[] }) => {
