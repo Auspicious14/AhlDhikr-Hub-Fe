@@ -1,52 +1,53 @@
-import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
 
-type Theme = 'light' | 'dark';
 type Language = 'en' | 'ar';
+type FontSize = number; // Represent font size as a number (e.g., percentage)
 
 interface SettingsContextType {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
   language: Language;
   setLanguage: (language: Language) => void;
+  fontSize: FontSize;
+  setFontSize: (size: FontSize) => void;
+  isMounted: boolean;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>('light');
+  const { theme, setTheme } = useTheme();
   const [language, setLanguage] = useState<Language>('en');
+  const [fontSize, setFontSize] = useState<FontSize>(100);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Check for saved theme in localStorage
-    const savedTheme = window.localStorage.getItem('theme') as Theme | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
+    setIsMounted(true);
 
-    // Check for saved language in localStorage
     const savedLang = window.localStorage.getItem('language') as Language | null;
-    if (savedLang) {
-      setLanguage(savedLang);
-    }
+    if (savedLang) setLanguage(savedLang);
+
+    const savedFontSize = window.localStorage.getItem('fontSize');
+    if (savedFontSize) setFontSize(Number(savedFontSize));
   }, []);
 
   useEffect(() => {
-    // Apply theme to the document
-    const root = window.document.documentElement;
-    root.classList.remove(theme === 'light' ? 'dark' : 'light');
-    root.classList.add(theme);
-    window.localStorage.setItem('theme', theme);
-  }, [theme]);
+    if (isMounted) {
+      const root = window.document.documentElement;
+      root.dir = language === 'ar' ? 'rtl' : 'ltr';
+      localStorage.setItem('language', language);
+    }
+  }, [language, isMounted]);
 
   useEffect(() => {
-    // Apply language direction to the document
-    const root = window.document.documentElement;
-    root.dir = language === 'ar' ? 'rtl' : 'ltr';
-    window.localStorage.setItem('language', language);
-  }, [language]);
+    if (isMounted) {
+      const root = window.document.documentElement;
+      root.style.fontSize = `${fontSize}%`;
+      localStorage.setItem('fontSize', String(fontSize));
+    }
+  }, [fontSize, isMounted]);
 
   return (
-    <SettingsContext.Provider value={{ theme, setTheme, language, setLanguage }}>
+    <SettingsContext.Provider value={{ language, setLanguage, fontSize, setFontSize, isMounted }}>
       {children}
     </SettingsContext.Provider>
   );

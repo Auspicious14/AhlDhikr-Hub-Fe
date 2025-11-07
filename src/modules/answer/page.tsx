@@ -4,38 +4,22 @@ import { useRouter } from 'next/router';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Breadcrumbs from './components/Breadcrumbs';
-import SourcePanel from './components/SourcePanel';
 import ShareButtons from './components/ShareButtons';
+import EvidenceSidebar from './components/EvidenceSidebar';
 import { toast } from 'sonner';
-import { Bookmark, Check, XCircle } from 'lucide-react';
+import { Bookmark, Check } from 'lucide-react';
 import { Button } from '@/components/Button';
 import { useMyDhikr } from '../my-dhikr/context';
 import { SavedAnswer } from '../my-dhikr/model';
-import { answers } from '@/lib/mock-data';
+import { Answer } from '@/lib/mock-data';
 
-const AnswerPage = () => {
+interface AnswerPageProps {
+  answer: Answer;
+}
+
+const AnswerPage = ({ answer }: AnswerPageProps) => {
   const router = useRouter();
-  const { slug } = router.query;
   const { saveAnswer, removeAnswer, isSaved } = useMyDhikr();
-
-  const answer = answers.find(a => a.slug === slug);
-
-  if (!answer) {
-    return (
-      <div className="bg-beige min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-grow container mx-auto px-4 py-16 text-center">
-            <XCircle className="mx-auto h-16 w-16 text-gray-400" />
-            <h1 className="mt-4 text-3xl font-bold font-heading">Answer Not Found</h1>
-            <p className="mt-2 text-gray-600">The question you are looking for does not exist or has been moved.</p>
-            <div className="mt-8">
-                <Button onClick={() => router.push('/ask')}>Ask a New Question</Button>
-            </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
 
   const alreadySaved = isSaved(answer.slug);
 
@@ -50,15 +34,19 @@ const AnswerPage = () => {
 
     if (alreadySaved) {
         removeAnswer(answerToSave.slug);
-        toast.error("Removed from My Dhikr.");
+        toast.error("Removed from My Dhikr.", {
+            style: { background: '#1c1c1c', color: '#f5f0e6', border: '1px solid #D4AF37' }
+        });
     } else {
         saveAnswer(answerToSave);
-        toast.success("Saved to My Dhikr!");
+        toast.success("Saved to My Dhikr!", {
+            style: { background: '#1c1c1c', color: '#f5f0e6', border: '1px solid #1A5F3A' }
+        });
     }
   };
 
   return (
-    <div className="bg-beige min-h-screen">
+    <div className="bg-brand-dark min-h-screen">
       <Head>
         <title>{answer.question} - AhlDhikr Hub</title>
         <meta name="description" content={`The answer to the question: ${answer.question}, with sources from the Quran and Sunnah.`} />
@@ -81,21 +69,33 @@ const AnswerPage = () => {
 
       <Header />
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-12">
         <Breadcrumbs question={answer.question} />
-        <div className="mt-4 bg-white p-8 rounded-lg shadow-md">
-          <h1 className="text-3xl font-bold font-heading mb-6">{answer.question}</h1>
-          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: answer.answer }} />
-          <hr className="my-8" />
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-            <Button onClick={handleSaveToggle} variant={alreadySaved ? "secondary" : "default"}>
-              {alreadySaved ? <Check className="mr-2 h-4 w-4" /> : <Bookmark className="mr-2 h-4 w-4" />}
-              {alreadySaved ? "Saved" : "Save to My Dhikr"}
-            </Button>
-            <ShareButtons question={answer.question} />
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-12">
+
+          {/* Main Answer Content */}
+          <div className="lg:col-span-8 bg-emerald-500/5 border border-emerald-500/20 rounded-card p-8">
+            <h1 className="text-3xl lg:text-4xl font-bold font-heading text-beige-100 mb-6">{answer.question}</h1>
+            <div
+              className="prose prose-invert max-w-none text-beige-100/80 prose-p:text-lg prose-p:leading-relaxed prose-blockquote:border-l-gold-500 prose-strong:text-gold-500"
+              dangerouslySetInnerHTML={{ __html: answer.answer }}
+            />
+            <hr className="my-8 border-emerald-500/20" />
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <Button onClick={handleSaveToggle} variant={alreadySaved ? "secondary" : "default"} size="lg">
+                {alreadySaved ? <Check className="mr-2 h-5 w-5" /> : <Bookmark className="mr-2 h-5 w-5" />}
+                {alreadySaved ? "Saved to My Dhikr" : "Save to My Dhikr"}
+              </Button>
+              <ShareButtons question={answer.question} />
+            </div>
           </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-4">
+            <EvidenceSidebar sources={answer.sources} />
+          </div>
+
         </div>
-        <SourcePanel sources={answer.sources} />
       </main>
       <Footer />
     </div>

@@ -1,38 +1,72 @@
 import Link from 'next/link';
+import { Twitter, Instagram, Facebook } from 'lucide-react';
+
+const FooterLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+    <li>
+        <Link href={href} className="text-beige-100/70 hover:text-gold-500 transition-colors duration-300">
+            {children}
+        </Link>
+    </li>
+);
+
+const SocialLink = ({ href, icon }: { href: string; icon: React.ReactNode }) => (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-beige-100/70 hover:text-gold-500 transition-colors duration-300">
+        {icon}
+    </a>
+);
 
 const Footer = () => {
   return (
-    <footer className="bg-white border-t">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <h3 className="text-lg font-bold font-heading text-emerald-600">AhlDhikr Hub</h3>
-            <p className="mt-2 text-gray-500">Answers from Quran & Sahih Hadith.</p>
+    <footer className="bg-brand-dark border-t border-emerald-500/20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+
+          <div className="lg:col-span-4">
+            <div className="flex items-center space-x-3">
+              <img src="/logo.svg" alt="AhlDhikr Hub Logo" className="h-10 w-auto" />
+              <span className="text-2xl font-bold font-heading text-beige-100">AhlDhikr Hub</span>
+            </div>
+            <p className="mt-4 text-beige-100/70 max-w-sm">
+              An Islamic Q&A platform where users can ask any faith-related question and get answers sourced directly from the Quran & Sahih Hadith.
+            </p>
           </div>
-          <div>
-            <h4 className="font-semibold text-gray-800">Quick Links</h4>
-            <ul className="mt-4 space-y-2">
-              <li><Link href="/ask" className="text-gray-500 hover:text-emerald-600">Ask a Question</Link></li>
-              <li><Link href="/my-dhikr" className="text-gray-500 hover:text-emerald-600">My Dhikr</Link></li>
-              <li><Link href="/about" className="text-gray-500 hover:text-emerald-600">About Us</Link></li>
+
+          <div className="lg:col-span-2">
+            <h4 className="font-bold text-lg text-gold-500 font-heading">Sitemap</h4>
+            <ul className="mt-4 space-y-3">
+              <FooterLink href="/">Home</FooterLink>
+              <FooterLink href="/ask">Ask a Question</FooterLink>
+              <FooterLink href="/my-dhikr">My Dhikr</FooterLink>
+              <FooterLink href="/#how-it-works">How It Works</FooterLink>
             </ul>
           </div>
-          <div>
-            <h4 className="font-semibold text-gray-800">Legal</h4>
-            <ul className="mt-4 space-y-2">
-              <li><Link href="/privacy" className="text-gray-500 hover:text-emerald-600">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="text-gray-500 hover:text-emerald-600">Terms of Service</Link></li>
+
+          <div className="lg:col-span-2">
+            <h4 className="font-bold text-lg text-gold-500 font-heading">Resources</h4>
+            <ul className="mt-4 space-y-3">
+              <FooterLink href="/about">About Us</FooterLink>
+              <FooterLink href="/contact">Contact</FooterLink>
+              <FooterLink href="/privacy">Privacy Policy</FooterLink>
+              <FooterLink href="/terms">Terms of Service</FooterLink>
             </ul>
           </div>
-          <div>
-            <h4 className="font-semibold text-gray-800">Connect</h4>
-            <div className="mt-4 flex space-x-4">
-              {/* Social media links here */}
+
+          <div className="lg:col-span-4">
+            <h4 className="font-bold text-lg text-gold-500 font-heading">Connect With Us</h4>
+            <p className="mt-4 text-beige-100/70">
+              Follow us on our social media channels to stay updated.
+            </p>
+            <div className="mt-6 flex space-x-6">
+                <SocialLink href="https://twitter.com" icon={<Twitter size={24} />} />
+                <SocialLink href="https://facebook.com" icon={<Facebook size={24} />} />
+                <SocialLink href="https://instagram.com" icon={<Instagram size={24} />} />
             </div>
           </div>
+
         </div>
-        <div className="mt-8 border-t pt-4 text-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} AhlDhikr Hub. All rights reserved.</p>
+
+        <div className="mt-16 border-t border-emerald-500/20 pt-8 text-center text-beige-100/60">
+          <p>&copy; {new Date().getFullYear()} AhlDhikr Hub. All Rights Reserved.</p>
         </div>
       </div>
     </footer>

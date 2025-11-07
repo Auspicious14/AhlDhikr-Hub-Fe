@@ -25,5 +25,9 @@
 
 # Logs
 npm-debug.log*
+npm_dev.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Test results
+/test-results/
