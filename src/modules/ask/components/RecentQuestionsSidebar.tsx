@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Clock } from 'lucide-react';
-import { answers } from '@/lib/mock-data';
+import useSWR from 'swr';
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const RecentQuestionLink = ({ question, slug }: { question: string; slug: string }) => (
   <Link href={`/ask/${slug}`} className="block py-3 px-4 rounded-lg text-beige-100/80 hover:bg-emerald-500/10 transition-colors duration-300">
@@ -9,7 +11,7 @@ const RecentQuestionLink = ({ question, slug }: { question: string; slug: string
 );
 
 const RecentQuestionsSidebar = () => {
-  const recentQuestions = answers.slice(0, 5); // Get the 5 most recent questions
+  const { data: recentQuestions, error } = useSWR('/api/recent-questions', fetcher);
 
   return (
     <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-card p-6">
@@ -18,9 +20,15 @@ const RecentQuestionsSidebar = () => {
         Recent Questions
       </h2>
       <div className="space-y-2">
-        {recentQuestions.map((q) => (
-          <RecentQuestionLink key={q.slug} question={q.question} slug={q.slug} />
-        ))}
+        {error && <p className="text-red-500">Failed to load recent questions.</p>}
+        {!recentQuestions && !error && <p className="text-beige-100/70">Loading...</p>}
+        {recentQuestions && recentQuestions.length > 0 ? (
+          recentQuestions.map((q: { slug: string; question: string }) => (
+            <RecentQuestionLink key={q.slug} question={q.question} slug={q.slug} />
+          ))
+        ) : (
+          <p className="text-beige-100/70">No recent questions to display.</p>
+        )}
       </div>
     </div>
   );

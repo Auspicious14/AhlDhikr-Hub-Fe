@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosError } from "axios";
 import { toast } from "sonner";
 
 export const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:12000",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://ahl-dhikr-hub-snowy.vercel.app/api",
 });
 
 apiClient.interceptors.request.use((config) => {
