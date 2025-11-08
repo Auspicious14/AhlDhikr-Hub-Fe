@@ -1,6 +1,7 @@
+import { SavedAnswer } from "@/modules/my-dhikr/model";
 import { Source } from "@/modules/answer/model";
 
-export interface Answer {
+export interface Answer extends SavedAnswer {
     answer: string;
     sources: Source[];
 }

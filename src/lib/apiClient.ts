@@ -3,6 +3,7 @@ import { toast } from "sonner";
 
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "https://ahl-dhikr-hub-snowy.vercel.app/api",
+  timeout: 10000, // 10 seconds
 });
 
 apiClient.interceptors.request.use((config) => {
