@@ -20,13 +20,13 @@ export const AskProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await apiClient.get<Answer>('/ask', { params: { question } });
+      const response = await apiClient.post<{ slug: string }>('/ask', { question });
       const { slug } = response.data;
-      // Redirect to the answer page on success
+
+      // Redirect to the new server-rendered answer page
       router.push(`/ask/${slug}`);
     } catch (err) {
       setError('An error occurred while fetching the answer. Please try again.');
-      console.error(err);
     } finally {
       setIsLoading(false);
     }
