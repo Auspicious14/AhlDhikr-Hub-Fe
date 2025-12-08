@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import { ISource } from "@/lib/mock-data";
+import { Source } from "@/modules/answer/model";
 import { BookOpen, Copy, Share2, Check } from "lucide-react";
 import { Button } from "@/components/Button";
 
 interface StreamingAnswerProps {
   answer: string;
-  sources: ISource[];
+  sources: Source[];
   isStreaming: boolean;
   slug: string | null;
 }
@@ -53,22 +53,24 @@ const StreamingAnswer: React.FC<StreamingAnswerProps> = ({
             <BookOpen className="mr-2 h-5 w-5" />
             Sources ({sources.length})
           </h3>
-          <div className="space-y-2">
+          <div className="space-y-3">
             {sources.map((source, index) => (
               <div
                 key={index}
-                className="flex items-start gap-3 p-3 bg-emerald-500/5 rounded-lg border border-emerald-500/10"
+                className="p-4 bg-emerald-500/5 rounded-lg border border-emerald-500/10 hover:border-emerald-500/30 transition-colors"
               >
-                <span className="flex-shrink-0 w-6 h-6 bg-gold-500/20 text-gold-500 rounded-full flex items-center justify-center text-sm font-medium">
-                  {index + 1}
-                </span>
-                <div className="flex-1">
-                  <p className="text-beige-100/90 text-sm">
-                    <span className="font-medium text-gold-500">
-                      [{source.type}]
-                    </span>{" "}
-                    {source.citation}
-                  </p>
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-7 h-7 bg-gold-500/20 text-gold-500 rounded-full flex items-center justify-center text-sm font-bold">
+                    {index + 1}
+                  </span>
+                  <div className="flex-1 space-y-2">
+                    <p className="text-gold-500 font-semibold text-sm">
+                      [{source.type}] {source.citation}
+                    </p>
+                    <p className="text-beige-100/90 leading-relaxed">
+                      {source.text}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}

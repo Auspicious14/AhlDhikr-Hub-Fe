@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Button } from "@/components/Button";
 import { Send, Eye } from "lucide-react";
-import { useStreamingAnswer } from "../hooks/useStreamingAnswer";
+import { useAsk } from "../context";
 import ThinkingIndicator from "./ThinkingIndicator";
 import StreamingAnswer from "./StreamingAnswer";
 
@@ -16,7 +16,7 @@ const QuestionSchema = Yup.object().shape({
 const QuestionForm = () => {
   const [preview, setPreview] = useState("");
   const {
-    askQuestion,
+    askQuestionStream,
     isThinking,
     isStreaming,
     sources,
@@ -24,15 +24,14 @@ const QuestionForm = () => {
     error,
     slug,
     reset,
-  } = useStreamingAnswer();
+  } = useAsk();
 
   const handleSubmit = async (
     values: { question: string },
     { setSubmitting, resetForm }: any
   ) => {
     try {
-      await askQuestion(values.question);
-      // Don't reset form immediately - let user see the result
+      await askQuestionStream(values.question);
       setPreview("");
     } catch (err) {
       console.error("Error submitting question:", err);
@@ -50,7 +49,6 @@ const QuestionForm = () => {
 
   return (
     <div className="space-y-6">
-      {/* Question Form */}
       <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-card p-8">
         <Formik
           initialValues={{ question: "" }}
@@ -72,7 +70,7 @@ const QuestionForm = () => {
                   id="question"
                   name="question"
                   rows="6"
-                  className="w-full bg-brand-dark/50 border border-emerald-500/30 rounded-button p-4 text-beige-100 placeholder-beige-100/50 focus:ring-2 focus:ring-gold-500 focus:border-gold-500 transition-all duration-300"
+                  className="w-full bg-white dark:bg-gray-800 border border-emerald-500/30 rounded-button p-4 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-gold-500 focus:border-gold-500 transition-all duration-300"
                   placeholder="Please be detailed and clear in your question. For example: 'What is the Islamic ruling on...?'"
                   onKeyUp={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                     setPreview(e.target.value);
@@ -87,12 +85,12 @@ const QuestionForm = () => {
               </div>
 
               {preview && !isProcessing && (
-                <div className="mb-8 p-6 border border-emerald-500/20 rounded-lg bg-brand-dark/40">
+                <div className="mb-8 p-6 border border-emerald-500/20 rounded-lg bg-gray-50 dark:bg-gray-800">
                   <h3 className="flex items-center text-lg font-semibold text-gold-500 mb-3">
                     <Eye className="mr-2 h-5 w-5" />
                     Live Preview
                   </h3>
-                  <p className="text-beige-100/80 whitespace-pre-wrap">
+                  <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                     {preview}
                   </p>
                 </div>
@@ -133,12 +131,10 @@ const QuestionForm = () => {
         </Formik>
       </div>
 
-      {/* Thinking Indicator */}
       {isThinking && (
         <ThinkingIndicator message="Searching for relevant sources..." />
       )}
 
-      {/* Streaming Answer */}
       <StreamingAnswer
         answer={answer}
         sources={sources}
