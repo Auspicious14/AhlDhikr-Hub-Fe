@@ -15,8 +15,8 @@ export const answers: Answer[] = [
         source: "Sahih Muslim",
         category: "Fiqh",
         sources: [
-            { citation: "Sahih Muslim, 1162", type: "Hadith", url: "#", arabic: "صحيح مسلم، ١١٦٢", transliteration: "Sahih Muslim, 1162", audioUrl: "#" },
-            { citation: "Qur'an 5:3", type: "Qur'an", url: "#", arabic: "الْيَوْمَ أَكْمَلْتُ لَكُمْ دِينَكُمْ وَأَتْمَمْتُ عَلَيْكُمْ نِعْمَتِي وَرَضِيتُ لَكُمُ الْإِسْلَامَ دِينًا", transliteration: "Al-yawma akmaltu lakum deenakum wa atmamtu 'alaykum ni'matee wa radeetu lakumu al-islama deena", audioUrl: "#" }
+            { citation: "Sahih Muslim, 1162", type: "Hadith", url: "#", arabic: "صحيح مسلم، ١١٦٢", transliteration: "Sahih Muslim, 1162", audioUrl: "#", text: ""},
+            { citation: "Qur'an 5:3", type: "Qur'an", url: "#", arabic: "الْيَوْمَ أَكْمَلْتُ لَكُمْ دِينَكُمْ وَأَتْمَمْتُ عَلَيْكُمْ نِعْمَتِي وَرَضِيتُ لَكُمُ الْإِسْلَامَ دِينًا", transliteration: "Al-yawma akmaltu lakum deenakum wa atmamtu 'alaykum ni'matee wa radeetu lakumu al-islama deena", audioUrl: "#", text: "" }
         ]
     },
     {
@@ -27,7 +27,7 @@ export const answers: Answer[] = [
         source: "Sahih al-Bukhari",
         category: "Hadith",
         sources: [
-            { citation: "Sahih al-Bukhari, 969", type: "Hadith", url: "#", arabic: "صحيح البخاري، ٩٦٩", transliteration: "Sahih al-Bukhari, 969", audioUrl: "#" }
+            { citation: "Sahih al-Bukhari, 969", type: "Hadith", url: "#", arabic: "صحيح البخاري، ٩٦٩", transliteration: "Sahih al-Bukhari, 969", audioUrl: "#", text:"" }
         ]
     }
 ];
