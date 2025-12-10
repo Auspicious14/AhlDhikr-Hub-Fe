@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { useRouter } from "next/router";
 import apiClient from "@/lib/apiClient";
+import { toast } from "sonner";
 import { Source } from "../answer/model";
 
 interface AskContextType {
@@ -27,8 +28,6 @@ interface RecentQuestion {
 }
 
 const AskContext = createContext<AskContextType | undefined>(undefined);
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 export const AskProvider = ({ children }: { children: ReactNode }) => {
   const [isThinking, setIsThinking] = useState(false);
@@ -83,12 +82,28 @@ export const AskProvider = ({ children }: { children: ReactNode }) => {
       setIsThinking(true);
 
       try {
-        const url = `${API_BASE_URL}/api/ask-stream`;
+        const token =
+          typeof window !== "undefined"
+            ? localStorage.getItem("authToken")
+            : null;
+        const url = apiClient.getUri({ url: "/ask-stream" });
+
         const response = await fetch(url, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
           body: JSON.stringify({ question }),
         });
+
+        if (response.status === 401) {
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("authToken");
+            toast.error("Session expired. Please login again.");
+          }
+          throw new Error("Session expired. Please login again.");
+        }
 
         if (!response.ok || !response.body) {
           throw new Error(
@@ -138,7 +153,7 @@ export const AskProvider = ({ children }: { children: ReactNode }) => {
     async (limit: number = 5): Promise<RecentQuestion[]> => {
       try {
         const response = await apiClient.get<RecentQuestion[]>(
-          "/api/recent-questions",
+          "/recent-questions",
           {
             params: { limit },
           }
