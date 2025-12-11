@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosError } from "axios";
 import { toast } from "sonner";
 
 export const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:12000",
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api` || "http://localhost:12000",
 });
 
 apiClient.interceptors.request.use((config) => {
@@ -53,22 +53,20 @@ apiClient.interceptors.response.use(
     // (these are likely navigation to non-existent pages)
     else if (error.response?.status === 404) {
       // Only show toast for non-GET requests or explicit API calls
-      if (error.config?.method !== 'get') {
+      if (error.config?.method !== "get") {
         toast.error(normalizedError.message);
       }
     }
     // Handle 403 Forbidden - only show for actual forbidden resources, not missing pages
     else if (error.response?.status === 403) {
-
-      const isApiCall = error.config?.url?.startsWith('/api') ||
-                        error.config?.baseURL?.includes('localhost:12000');
+      const isApiCall =
+        error.config?.url?.startsWith("/api") ||
+        error.config?.baseURL?.includes("localhost:12000");
 
       if (isApiCall && normalizedError.message) {
         toast.error(normalizedError.message);
       }
-    }
-
-    else if (normalizedError.message && error.response?.status !== 404) {
+    } else if (normalizedError.message && error.response?.status !== 404) {
       toast.error(normalizedError.message);
     }
 

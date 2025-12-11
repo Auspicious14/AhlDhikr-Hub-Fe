@@ -7,3 +7,16 @@ export interface Source {
   transliteration: string;
   audioUrl: string;
 }
+
+export interface Answer {
+  _id?: string;
+  question: string;
+  slug: string;
+  answer: string;
+  answerSnippet: string;
+  source: string;
+  category: string;
+  sources: Source[];
+  createdAt?: string;
+  updatedAt?: string;
+}

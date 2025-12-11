@@ -1,15 +1,32 @@
-import Link from 'next/link';
-import { Clock } from 'lucide-react';
-import { answers } from '@/lib/mock-data';
+import Link from "next/link";
+import { Clock } from "lucide-react";
+import { useAsk } from "../context";
+import { useEffect, useState } from "react";
 
-const RecentQuestionLink = ({ question, slug }: { question: string; slug: string }) => (
-  <Link href={`/ask/${slug}`} className="block py-3 px-4 rounded-lg text-beige-100/80 hover:bg-emerald-500/10 transition-colors duration-300">
+const RecentQuestionLink = ({
+  question,
+  slug,
+}: {
+  question: string;
+  slug: string;
+}) => (
+  <Link
+    href={`/ask/${slug}`}
+    className="block py-3 px-4 rounded-lg text-beige-100/80 hover:bg-emerald-500/10 transition-colors duration-300"
+  >
     {question}
   </Link>
 );
 
 const RecentQuestionsSidebar = () => {
-  const recentQuestions = answers.slice(0, 5); // Get the 5 most recent questions
+  const { getRecentQuestions } = useAsk();
+  const [questions, setQuestions] = useState<
+    { question: string; slug: string }[]
+  >([]);
+
+  useEffect(() => {
+    getRecentQuestions(5).then(setQuestions);
+  }, [getRecentQuestions]);
 
   return (
     <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-card p-6">
@@ -18,9 +35,17 @@ const RecentQuestionsSidebar = () => {
         Recent Questions
       </h2>
       <div className="space-y-2">
-        {recentQuestions.map((q) => (
-          <RecentQuestionLink key={q.slug} question={q.question} slug={q.slug} />
-        ))}
+        {questions.length > 0 ? (
+          questions.map((q) => (
+            <RecentQuestionLink
+              key={q.slug}
+              question={q.question}
+              slug={q.slug}
+            />
+          ))
+        ) : (
+          <p className="text-beige-100/60 px-4">No recent questions yet.</p>
+        )}
       </div>
     </div>
   );
