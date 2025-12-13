@@ -4,7 +4,6 @@ import { useAuth } from '../context';
 import { useState } from 'react';
 import { Eye, EyeOff, UserPlus, Loader2 } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
-import { useRouter} from "next/router";
 
 
 const signupSchema = Yup.object().shape({
@@ -17,7 +16,6 @@ const signupSchema = Yup.object().shape({
 });
 
 export const SignupForm = ({ onSwitchToLogin }: { onSwitchToLogin: () => void }) => {
-  const router = useRouter()
   const { register, googleLogin } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -44,7 +42,7 @@ export const SignupForm = ({ onSwitchToLogin }: { onSwitchToLogin: () => void })
             try {
               setError('');
               await register(values.email, values.password, values.name);
-              router.push('/');
+              
             } catch (err: any) {
               setError(err.response?.data?.message || 'Failed to create account. Please try again.');
             } finally {
