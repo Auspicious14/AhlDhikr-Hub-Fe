@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { toast } from "sonner";
+import { getCookie } from './cookies'; 
 
 export const apiClient = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api` || "http://localhost:12000",
@@ -7,7 +8,7 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.request.use((config) => {
   const token =
-    typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+    typeof window !== "undefined" ? getCookie('auth_token') : null;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
