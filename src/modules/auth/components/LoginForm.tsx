@@ -4,6 +4,7 @@ import { useAuth } from '../context';
 import { useState } from 'react';
 import { Eye, EyeOff, LogIn, Loader2 } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
+import { useRouter} from "next/router";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
@@ -11,6 +12,7 @@ const loginSchema = Yup.object().shape({
 });
 
 export const LoginForm = ({ onSwitchToRegister }: { onSwitchToRegister: () => void }) => {
+  const router = useRouter()
   const { login, googleLogin } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -36,6 +38,7 @@ export const LoginForm = ({ onSwitchToRegister }: { onSwitchToRegister: () => vo
             try {
               setError('');
               await login(values.email, values.password);
+              router.push('/');
             } catch (err: any) {
               setError(err.response?.data?.message || 'Failed to login. Please try again.');
             } finally {
