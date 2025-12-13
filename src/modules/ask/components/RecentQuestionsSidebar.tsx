@@ -1,7 +1,19 @@
 import Link from "next/link";
 import { Clock } from "lucide-react";
-import { useAsk } from "../context";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import apiClient from "@/lib/apiClient";
+
+interface RecentQuestion {
+  question: string;
+  slug: string;
+}
+
+const fetchRecentQuestions = async (): Promise<RecentQuestion[]> => {
+  const response = await apiClient.get<RecentQuestion[]>("/recent-questions", {
+    params: { limit: 5 },
+  });
+  return response.data;
+};
 
 const RecentQuestionLink = ({
   question,
@@ -19,14 +31,14 @@ const RecentQuestionLink = ({
 );
 
 const RecentQuestionsSidebar = () => {
-  const { getRecentQuestions } = useAsk();
-  const [questions, setQuestions] = useState<
-    { question: string; slug: string }[]
-  >([]);
-
-  useEffect(() => {
-    getRecentQuestions(5).then(setQuestions);
-  }, [getRecentQuestions]);
+  const {
+    data: questions = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["recentQuestions"],
+    queryFn: fetchRecentQuestions,
+  });
 
   return (
     <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-card p-6">
@@ -35,7 +47,11 @@ const RecentQuestionsSidebar = () => {
         Recent Questions
       </h2>
       <div className="space-y-2">
-        {questions.length > 0 ? (
+        {isLoading ? (
+          <p className="text-beige-100/60 px-4">Loading...</p>
+        ) : isError ? (
+          <p className="text-red-400 px-4">Failed to load questions.</p>
+        ) : questions.length > 0 ? (
           questions.map((q) => (
             <RecentQuestionLink
               key={q.slug}

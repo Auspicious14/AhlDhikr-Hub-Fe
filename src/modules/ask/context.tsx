@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import apiClient from "@/lib/apiClient";
 import { toast } from "sonner";
 import { Source } from "../answer/model";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface AskContextType {
   isThinking: boolean;
@@ -18,7 +19,7 @@ interface AskContextType {
   error: string | null;
   slug: string | null;
   askQuestionStream: (question: string) => Promise<void>;
-  getRecentQuestions: (limit?: number) => Promise<RecentQuestion[]>;
+
   reset: () => void;
 }
 
@@ -37,6 +38,7 @@ export const AskProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
   const [slug, setSlug] = useState<string | null>(null);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const reset = useCallback(() => {
     setIsThinking(false);
@@ -66,6 +68,7 @@ export const AskProvider = ({ children }: { children: ReactNode }) => {
       case "done":
         setIsStreaming(false);
         setSlug(event.data.slug);
+        queryClient.invalidateQueries({ queryKey: ["recentQuestions"] });
         break;
       case "error":
         setError(event.data.message || "An error occurred");
@@ -149,24 +152,6 @@ export const AskProvider = ({ children }: { children: ReactNode }) => {
     [reset, handleEvent]
   );
 
-  const getRecentQuestions = useCallback(
-    async (limit: number = 5): Promise<RecentQuestion[]> => {
-      try {
-        const response = await apiClient.get<RecentQuestion[]>(
-          "/recent-questions",
-          {
-            params: { limit },
-          }
-        );
-        return response.data;
-      } catch (err) {
-        console.error("Error fetching recent questions:", err);
-        return [];
-      }
-    },
-    []
-  );
-
   return (
     <AskContext.Provider
       value={{
@@ -177,7 +162,6 @@ export const AskProvider = ({ children }: { children: ReactNode }) => {
         error,
         slug,
         askQuestionStream,
-        getRecentQuestions,
         reset,
       }}
     >

@@ -1,17 +1,20 @@
-import React from 'react';
-import Head from 'next/head';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import QuestionForm from './components/QuestionForm';
-import CategoriesSidebar from './components/CategoriesSidebar';
-import RecentQuestionsSidebar from './components/RecentQuestionsSidebar';
+import React from "react";
+import Head from "next/head";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import QuestionForm from "./components/QuestionForm";
+// import CategoriesSidebar from './components/CategoriesSidebar';
+import RecentQuestionsSidebar from "./components/RecentQuestionsSidebar";
 
 const AskPage = () => {
   return (
     <div className="bg-brand-dark min-h-screen flex flex-col">
       <Head>
         <title>Ask a Question - AhlDhikr Hub</title>
-        <meta name="description" content="Ask any Islamic question and get answers sourced from the Quran and Sahih Hadith. Use our AI-powered search to find the guidance you seek." />
+        <meta
+          name="description"
+          content="Ask any Islamic question and get answers sourced from the Quran and Sahih Hadith. Use our AI-powered search to find the guidance you seek."
+        />
       </Head>
 
       <Header />
@@ -29,7 +32,7 @@ const AskPage = () => {
           {/* Sidebar */}
           <div className="lg:col-span-4">
             <div className="space-y-10">
-              <CategoriesSidebar />
+              {/* <CategoriesSidebar /> */}
               <RecentQuestionsSidebar />
             </div>
           </div>
