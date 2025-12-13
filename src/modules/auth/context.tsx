@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/apiClient';
 import { setCookie, getCookie, removeCookie } from '@/lib/cookies';
+import { useRouter} from "next/router";
 
 interface User {
   id: string;
@@ -25,6 +26,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   useEffect(() => {
     const token = getCookie('auth_token');
@@ -58,6 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setCookie('auth_token', data.token, { expires: 7, sameSite: 'strict' });
         setUser(data.user);
         queryClient.invalidateQueries();
+        router.push('/');
       }
     },
   });
@@ -72,6 +75,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setCookie('auth_token', data.token, { expires: 7, sameSite: 'strict' });
         setUser(data.user);
         queryClient.invalidateQueries();
+        router.push('/');
+
       }
     },
   });
@@ -86,6 +91,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setCookie('auth_token', data.token, { expires: 7, sameSite: 'strict' });
         setUser(data.user);
         queryClient.invalidateQueries();
+        router.push('/');
+
       }
     },
   });
