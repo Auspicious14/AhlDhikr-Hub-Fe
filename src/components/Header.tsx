@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import { Sun, Moon, Menu, X, Compass, BookOpen, Heart, Settings, LogIn } from 'lucide-react';
+import { Sun, Moon, Menu, X, BookOpen, Settings, LogIn, LogOut, User } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/Button';
+import { useAuth } from '@/modules/auth/context';
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
   <Link href={href} className="text-beige-100 hover:text-gold-500 transition-colors duration-300">
@@ -18,6 +19,7 @@ const MobileNavLink = ({ href, children, onClick }: { href: string; children: Re
 
 const Header = () => {
   const { theme, setTheme } = useTheme();
+  const { user, isAuthenticated, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -29,6 +31,11 @@ const Header = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setIsMenuOpen(false);
   };
 
   const renderThemeToggle = () => {
@@ -58,16 +65,29 @@ const Header = () => {
 
             <nav className="hidden md:flex md:items-center md:space-x-8">
               <NavLink href="/ask">Ask a Question</NavLink>
-              <NavLink href="/my-dhikr">My Dhikr</NavLink>
+              {isAuthenticated && <NavLink href="/my-dhikr">My Dhikr</NavLink>}
               <NavLink href="/settings">Settings</NavLink>
             </nav>
 
             <div className="flex items-center space-x-4">
               {renderThemeToggle()}
-              <div className="hidden md:block">
-                <Link href="/login">
-                  <Button variant="secondary">Login</Button>
-                </Link>
+              <div className="hidden md:flex md:items-center md:space-x-4">
+                {isAuthenticated ? (
+                  <>
+                    <div className="flex items-center space-x-2 text-beige-100">
+                      <User className="h-5 w-5" />
+                      <span className="text-sm">{user?.name || user?.email}</span>
+                    </div>
+                    <Button variant="ghost" onClick={logout}>
+                      <LogOut className="h-5 w-5 mr-2" />
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <Link href="/auth">
+                    <Button variant="secondary">Login</Button>
+                  </Link>
+                )}
               </div>
               <div className="md:hidden">
                 <button
@@ -83,39 +103,53 @@ const Header = () => {
         </div>
       </header>
 
-      {/* Mobile Menu */}
       <div
         className={`fixed inset-0 z-40 bg-brand-dark/95 backdrop-blur-xl transition-transform duration-300 ease-in-out md:hidden ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full">
-          <div className="flex justify-end h-20 items-center">
-            {/* This is a spacer to align with the header button */}
-          </div>
+          <div className="flex justify-end h-20 items-center"></div>
           <nav className="flex flex-col space-y-6 pt-8">
             <MobileNavLink href="/ask" onClick={toggleMenu}>
-              <Heart />
+              <BookOpen />
               <span>Ask a Question</span>
             </MobileNavLink>
-            <MobileNavLink href="/my-dhikr" onClick={toggleMenu}>
-              <BookOpen />
-              <span>My Dhikr</span>
-            </MobileNavLink>
+            {isAuthenticated && (
+              <MobileNavLink href="/my-dhikr" onClick={toggleMenu}>
+                <BookOpen />
+                <span>My Dhikr</span>
+              </MobileNavLink>
+            )}
             <MobileNavLink href="/settings" onClick={toggleMenu}>
               <Settings />
               <span>Settings</span>
             </MobileNavLink>
             <div className="border-t border-emerald-500/20 my-6"></div>
-            <MobileNavLink href="/login" onClick={toggleMenu}>
+            {isAuthenticated ? (
+              <>
+                <div className="flex items-center space-x-4 py-3 px-4 text-lg text-beige-100">
+                  <User />
+                  <span>{user?.name || user?.email}</span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center space-x-4 py-3 px-4 text-lg text-beige-100 rounded-lg hover:bg-emerald-500/20 transition-colors duration-300 w-full text-left"
+                >
+                  <LogOut />
+                  <span>Logout</span>
+                </button>
+              </>
+            ) : (
+              <MobileNavLink href="/auth" onClick={toggleMenu}>
                 <LogIn />
                 <span>Login</span>
-            </MobileNavLink>
+              </MobileNavLink>
+            )}
           </nav>
         </div>
       </div>
-       {/* Spacer to prevent content from being hidden behind the fixed header */}
-       <div className="h-20" />
+      <div className="h-20" />
     </>
   );
 };
