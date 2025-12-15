@@ -10,7 +10,7 @@ interface RecentQuestion {
 
 const fetchRecentQuestions = async (): Promise<RecentQuestion[]> => {
   const response = await apiClient.get<RecentQuestion[]>("/recent-questions", {
-    params: { limit: 5 },
+    params: { limit: 10 },
   });
   return response.data;
 };

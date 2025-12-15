@@ -103,7 +103,7 @@ const QuestionForm = () => {
               )}
 
               <div className="flex gap-3 justify-end">
-                {(answer || isProcessing) && (
+                {/* {(answer || isProcessing) && (
                   <Button
                     type="button"
                     variant="outline"
@@ -116,14 +116,14 @@ const QuestionForm = () => {
                   >
                     New Question
                   </Button>
-                )}
+                )} */}
                 <Button
                   type="submit"
                   size="lg"
                   disabled={isSubmitting || !isValid || !dirty || isProcessing}
                 >
                   <Send className="mr-2 h-5 w-5" />
-                  {isProcessing ? "Processing..." : "Submit Question"}
+                  {isProcessing ? "Processing..." : "Submit"}
                 </Button>
               </div>
             </Form>
