@@ -1,9 +1,17 @@
-import { useRouter } from 'next/router';
-import { Formik, Form, Field } from 'formik';
-import { Search, ShieldCheck, BookCheck, Users } from 'lucide-react';
-import { Button } from '@/components/Button';
+import { useRouter } from "next/router";
+import { Formik, Form, Field } from "formik";
+import { Search, ShieldCheck, BookCheck, Users } from "lucide-react";
+import { Button } from "@/components/Button";
 
-const TrustBadge = ({ icon, title, subtitle }: { icon: React.ReactNode; title: string; subtitle: string }) => (
+const TrustBadge = ({
+  icon,
+  title,
+  subtitle,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  subtitle: string;
+}) => (
   <div className="flex items-center space-x-4">
     <div className="flex-shrink-0 bg-emerald-500/10 p-3 rounded-full text-gold-500">
       {icon}
@@ -30,36 +38,20 @@ const Hero = () => {
           Seek Truth from Authentic Sources
         </h1>
         <p className="mt-4 text-lg md:text-xl text-beige-100/80 max-w-3xl mx-auto">
-          AhlDhikr Hub is an Islamic Q&A platform where users can ask any faith-related question and get answers sourced directly from the Quran & Sahih Hadith.
+          AhlDhikr Hub is an Islamic Q&A platform where users can ask any
+          faith-related question and get answers sourced directly from the Quran
+          & Sahih Hadith.
         </p>
 
         <div className="mt-12 max-w-2xl mx-auto">
-          <Formik
-            initialValues={{ query: '' }}
-            onSubmit={(values, { setSubmitting }) => {
-              router.push(`/ask?q=${encodeURIComponent(values.query)}`);
-              setSubmitting(false);
-            }}
+          <Button
+            type="button"
+            size="lg"
+            onClick={() => router.push("/ask")}
+            // className="text-xl p py-6"
           >
-            {({ isSubmitting }) => (
-              <Form className="relative">
-                <Field
-                  type="text"
-                  name="query"
-                  placeholder="Ask any question about Islam..."
-                  className="w-full h-16 pl-16 pr-40 py-4 text-lg bg-brand-dark/50 border border-emerald-500/30 rounded-button text-beige-100 placeholder-beige-100/50 focus:ring-2 focus:ring-gold-500 focus:border-gold-500 transition-all duration-300"
-                />
-                <div className="absolute inset-y-0 left-0 flex items-center pl-6">
-                  <Search className="h-6 w-6 text-gold-500" />
-                </div>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-                  <Button type="submit" size="lg" disabled={isSubmitting}>
-                    Ask Question
-                  </Button>
-                </div>
-              </Form>
-            )}
-          </Formik>
+            Ask Question
+          </Button>
         </div>
 
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
