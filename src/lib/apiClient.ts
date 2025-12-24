@@ -1,14 +1,13 @@
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { toast } from "sonner";
-import { getCookie } from './cookies'; 
+import { getCookie } from "./cookies";
 
 export const apiClient = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api` || "http://localhost:12000",
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api` || "http://localhost:2002",
 });
 
 apiClient.interceptors.request.use((config) => {
-  const token =
-    typeof window !== "undefined" ? getCookie('auth_token') : null;
+  const token = typeof window !== "undefined" ? getCookie("auth_token") : null;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
